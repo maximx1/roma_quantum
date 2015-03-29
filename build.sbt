@@ -19,10 +19,9 @@ libraryDependencies ++= Seq(
 	"com.github.tototoshi" %% "play-json4s-jackson" % "0.3.1",
 	"com.github.tototoshi" %% "play-json4s-test-jackson" % "0.3.1" % "test",
 	"org.mindrot" % "jbcrypt" % "0.3m",
-	"org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
+	"org.scalatest" % "scalatest_2.11" % "2.2.1" % "test",
+	"com.nulab-inc" %% "play2-oauth2-provider" % "0.13.2"
 )
-
-instrumentSettings
 
 ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 80
 
