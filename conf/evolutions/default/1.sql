@@ -10,6 +10,17 @@ create table USERS(
 	primary key(ID)
 );
 
+create table AUTH_CODES(
+  AUTHORIZATION_CODE text not null,
+  USER_ID integer not null,
+  REDIRECT_URI text,
+  CREATED_AT timestamp not null,
+  SCOPE text,
+  CLIENT_ID text,
+  EXPIRES_IN integer not null
+}
+
 # --- !Downs
+drop table if exists AUTH_CODES;
 drop table if exists USERS;
 drop sequence if exists USERS_ID_SEQ;
