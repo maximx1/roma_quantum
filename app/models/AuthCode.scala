@@ -12,7 +12,7 @@ case class AuthCode(
     scope: Option[String],
     clientId: Option[String],
     expiresIn: Int
-)
+) extends Model
 
 class AuthCodes(tag: Tag) extends Table[AuthCode](tag, "AUTH_CODES") {
   def authorizationCode = column[String]("AUTHORIZATION_CODE", O.PrimaryKey)
@@ -23,4 +23,8 @@ class AuthCodes(tag: Tag) extends Table[AuthCode](tag, "AUTH_CODES") {
   def clientId = column[Option[String]]("CLIENT_ID")
   def expiresIn = column[Int]("EXPIRES_IN")
   def * = (authorizationCode, userId, redirectUri, createdAt, scope, clientId, expiresIn) <> (AuthCode.tupled, AuthCode.unapply)
+}
+
+object AuthCodes extends BaseSlickTrait[AuthCode] {
+  override protected def model = TableQueries.authCodes
 }
