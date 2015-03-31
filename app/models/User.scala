@@ -40,4 +40,5 @@ class Users(tag: Tag) extends Table[User](tag, "USERS") {
 object Users extends BaseSlickTrait[User] {
   override protected def model = TableQueries.users
   def byId(id: UUID) = DB withSession { implicit session => model.filter{_.id === id}.list}
+  def byEmail(email: String) = DB withSession { implicit session => model.filter{_.email === email}.list}
 }

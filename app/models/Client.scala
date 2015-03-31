@@ -26,7 +26,7 @@ class Clients(tag: Tag) extends Table[Client](tag, "CLIENTS") {
 object Clients extends BaseSlickTrait[Client] {
   override protected def model = TableQueries.clients
   
-  def validate(id: String, secret: Option[String], grantType: String)(implicit executionContext: ExecutionContext): Future[Boolean] = Future {
+  def validate(id: String, secret: Option[String], grantType: String): Boolean =
     DB.withSession { implicit session => 
       val result = for {
         ((clients, clientGrantTypes), grantTypes) <- TableQueries.clients innerJoin TableQueries.clientGrantTypes on (_.id === _.clientId) innerJoin TableQueries.grantTypes on (_._2.grantTypeId === _.id)
@@ -34,5 +34,4 @@ object Clients extends BaseSlickTrait[Client] {
       } yield clients
       result.firstOption.isDefined
     }
-  }
 }

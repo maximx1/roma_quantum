@@ -3,7 +3,7 @@ create table USERS(
 	ID uuid not null,
 	FIRST_NAME text not null,
 	LAST_NAME text not null,
-	EMAIL text not null,
+	EMAIL text not null unique,
     PASSKEY text not null,
     CREATED_AT timestamp not null,
     CREATED_BY_UUID uuid not null,
