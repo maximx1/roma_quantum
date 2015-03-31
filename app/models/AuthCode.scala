@@ -3,10 +3,11 @@ package models
 import play.api.db.slick.Config.driver.simple._
 import org.joda.time.DateTime
 import com.github.tototoshi.slick.HsqldbJodaSupport._
+import java.util.UUID
 
 case class AuthCode(
     authorizationCode: String,
-    userId: Int,
+    userId: UUID,
     redirectUri: Option[String],
     createdAt: DateTime,
     scope: Option[String],
@@ -16,7 +17,7 @@ case class AuthCode(
 
 class AuthCodes(tag: Tag) extends Table[AuthCode](tag, "AUTH_CODES") {
   def authorizationCode = column[String]("AUTHORIZATION_CODE", O.PrimaryKey)
-  def userId = column[Int]("USER_ID")
+  def userId = column[UUID]("USER_ID")
   def redirectUri = column[Option[String]]("REDIRECT_URI")
   def createdAt = column[DateTime]("CREATED_AT")
   def scope = column[Option[String]]("SCOPE")

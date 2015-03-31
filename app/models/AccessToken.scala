@@ -3,11 +3,12 @@ package models
 import play.api.db.slick.Config.driver.simple._
 import org.joda.time.DateTime
 import com.github.tototoshi.slick.HsqldbJodaSupport._
+import java.util.UUID
 
 case class AccessToken(
     accessToken: String,
     refreshToken: Option[String],
-    userId: Int,
+    userId: UUID,
     scope: Option[String],
     expiresIn: Option[Long],
     createdAt: DateTime,
@@ -17,7 +18,7 @@ case class AccessToken(
 class AccessTokens(tag: Tag) extends Table[AccessToken](tag, "ACCESS_TOKENS") {
   def accessToken = column[String]("ACCESS_TOKEN", O.PrimaryKey)
   def refreshToken = column[Option[String]]("REFRESH_TOKEN")
-  def userId = column[Int]("USER_ID")
+  def userId = column[UUID]("USER_ID")
   def scope = column[Option[String]]("SCOPE")
   def expiresIn = column[Option[Long]]("EXPIRES_IN")
   def createdAt = column[DateTime]("CREATED_AT")

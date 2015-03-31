@@ -1,11 +1,16 @@
 package oath2
 
-import models.User
+import models._
 import scala.concurrent.Future
 import scalaoauth2.provider.{DataHandler, ClientCredential, AuthInfo, AccessToken}
+import models.Client
 
 class Oath2Handler extends DataHandler[User] {
-  def validateClient(clientCredential: ClientCredential, grantType: String): Future[Boolean] = ???
+  import scala.concurrent.ExecutionContext.Implicits.global
+  
+  def validateClient(clientCredential: ClientCredential, grantType: String): Future[Boolean] = {
+    Clients.validate(clientCredential.clientId, clientCredential.clientSecret, grantType)
+  }
   
   def findUser(username: String, password: String): Future[Option[User]] = ???
   

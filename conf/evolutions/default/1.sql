@@ -1,18 +1,21 @@
 # --- !Ups
-create sequence USERS_ID_SEQ;
 create table USERS(
-	ID integer not null default nextval('USERS_ID_SEQ'),
+	ID uuid not null,
 	FIRST_NAME text not null,
 	LAST_NAME text not null,
-	NICKNAME text not null,
-	SYSTEM_KEY UUID not null,
 	EMAIL text not null,
+    PASSKEY text not null,
+    CREATED_AT timestamp not null,
+    CREATED_BY_UUID uuid not null,
+    UPDATED_AT timestamp not null,
+    UPDATED_BY_UUID uuid not null,
+    DELETED_AT timestamp not null,
+    DELETED_BY_UUID uuid not null,
 	primary key(ID)
 );
 
-create sequence CLIENTS_ID_SEQ;
 create table CLIENTS(
-    ID integer not null default nextval('CLIENTS_ID_SEQ'),
+    ID text not null,
     SECRET text,
     REDIRECT_URI text,
     SCOPE text,
@@ -29,9 +32,9 @@ create table GRANT_TYPES(
 create table ACCESS_TOKENS(
     ACCESS_TOKEN text not null,
     REFRESH_TOKEN text,
-    USER_ID integer not null,
+    USER_ID uuid not null,
     SCOPE text,
-    EXPIRES_IN integer,
+    EXPIRES_IN bigint,
     CREATED_AT timestamp not null,
     CLIENT_ID text
     primary key(ACCESS_TOKEN),
@@ -41,7 +44,7 @@ create table ACCESS_TOKENS(
 
 create table AUTH_CODES(
     AUTHORIZATION_CODE text not null,
-    USER_ID integer not null,
+    USER_ID uuid not null,
     REDIRECT_URI text,
     CREATED_AT timestamp not null,
     SCOPE text,
@@ -53,7 +56,7 @@ create table AUTH_CODES(
 );
 
 create table CLIENT_GRANT_TYPES
-    CLIENT_ID integer not null,
+    CLIENT_ID text not null,
     GRANT_TYPE_ID integer not null,
     primary key(CLIENT_ID, GRANT_TYPE_ID),
     foreign key(CLIENT_ID) references CLIENTS(ID),
@@ -62,7 +65,7 @@ create table CLIENT_GRANT_TYPES
 
 create sequence CONFIRMATION_TOKENS_ID_SEQ;
 create table CONFIRMATION_TOKENS(
-    ID integer not null default nextval('CONFIRMATION_TOKENS_ID_SEQ'),
+    ID bigint not null default nextval('CONFIRMATION_TOKENS_ID_SEQ'),
     UUID uuid not null,
     EMAIL text not null,
     CREATION_TIME timestamp not null,
@@ -76,10 +79,9 @@ drop table if exists AUTH_CODES;
 drop table if exists ACCESS_TOKENS;
 drop table if exists CLIENT_GRANT_TYPES;
 drop table if exists CONFIRMATION_TOKENS;
+drop table if exists CONFIRMATION_TOKENS_ID_SEQ;
 
 drop table if exists GRANT_TYPES;
 drop sequence if exists GRANT_TYPES_ID_SEQ;
 drop table if exists CLIENTS;
-drop sequence if exists CLIENTS_ID_SEQ;
 drop table if exists USERS;
-drop sequence if exists USERS_ID_SEQ;

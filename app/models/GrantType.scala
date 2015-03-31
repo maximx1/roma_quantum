@@ -7,12 +7,12 @@ import org.joda.time.DateTime
 import com.github.tototoshi.slick.HsqldbJodaSupport._
 
 case class GrantType(
-    id: Option[Int],
+    id: Int,
     grantType: String
 ) extends Model
 
 class GrantTypes(tag: Tag) extends Table[GrantType](tag, "GRANT_TYPES") {
-  def id = column[Option[Int]]("ID", O.PrimaryKey)
+  def id = column[Int]("ID", O.PrimaryKey)
   def grantType = column[String]("GRANT_TYPE")
   def * = (id, grantType) <> (GrantType.tupled, GrantType.unapply)
 }

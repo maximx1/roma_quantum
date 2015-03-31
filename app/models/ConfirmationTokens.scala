@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 import com.github.tototoshi.slick.HsqldbJodaSupport._
 
 case class ConfirmationToken(
-    id: Option[Int],
+    id: Long,
     uuid: UUID,
     email: String,
     creationTime: DateTime,
@@ -16,7 +16,7 @@ case class ConfirmationToken(
 ) extends Model
 
 class ConfirmationTokens(tag: Tag) extends Table[ConfirmationToken](tag, "CONFIRMATION_TOKENS") {
-  def id = column[Option[Int]]("ID", O.PrimaryKey, O.AutoInc)
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def uuid = column[UUID]("UUID")
   def email = column[String]("EMAIL")
   def creationTime = column[DateTime]("CREATION_TIME")
