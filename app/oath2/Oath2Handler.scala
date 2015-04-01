@@ -32,7 +32,11 @@ class Oath2Handler extends DataHandler[User] {
     }
   }
   
-  def getStoredAccessToken(authInfo: AuthInfo[User]): Future[Option[AccessToken]] = ???
+  def getStoredAccessToken(authInfo: AuthInfo[User]): Future[Option[AccessToken]] = Future {
+    AccessTokens.findByIds(authInfo.user.id, authInfo.clientId).headOption match {
+      case Some(token) => Some(AccessToken(token.accessToken, token.refreshToken, token.scope, token.expiresIn, token.createdAt.toDate))
+    }
+  }
   
   def refreshAccessToken(authInfo: AuthInfo[User], refreshToken: String): Future[AccessToken] = ???
   

@@ -33,4 +33,8 @@ object AccessTokens extends BaseSlickTrait[AccessToken] {
   def -=(userId: UUID, clientId: Option[String]) = DB withSession { implicit session =>
     model.filter(x => x.clientId === clientId && x.userId === userId).delete
   }
+  
+  def findByIds(userId: UUID, clientId: Option[String]) = DB withSession { implicit session =>
+    model.filter(x => x.clientId === clientId && x.userId === userId).list
+  }
 }
