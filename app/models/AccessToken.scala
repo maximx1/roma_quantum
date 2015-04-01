@@ -1,9 +1,11 @@
 package models
 
-import play.api.db.slick.Config.driver.simple._
 import org.joda.time.DateTime
 import com.github.tototoshi.slick.HsqldbJodaSupport._
 import java.util.UUID
+import play.api.Play.current
+import play.api.db.slick.DB
+import play.api.db.slick.Config.driver.simple._
 
 case class AccessToken(
     accessToken: String,
@@ -28,4 +30,7 @@ class AccessTokens(tag: Tag) extends Table[AccessToken](tag, "ACCESS_TOKENS") {
 
 object AccessTokens extends BaseSlickTrait[AccessToken] {
   override protected def model = TableQueries.accessTokens
+  def -=(userId: UUID, clientId: Option[String]) = DB withSession { implicit session =>
+    model.filter(x => x.clientId === clientId && x.userId === userId).delete
+  }
 }

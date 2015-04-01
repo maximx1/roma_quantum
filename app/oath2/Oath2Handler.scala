@@ -1,9 +1,13 @@
 package oath2
 
-import models._
+import models.{AccessToken => AccessTokenE, _}
 import scala.concurrent.Future
 import scalaoauth2.provider.{DataHandler, ClientCredential, AuthInfo, AccessToken}
 import org.mindrot.jbcrypt.BCrypt
+import sun.misc.BASE64Encoder
+import java.util.UUID
+import scala.util.{Success, Failure}
+import org.joda.time.DateTime
 
 class Oath2Handler extends DataHandler[User] {
   import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,7 +20,17 @@ class Oath2Handler extends DataHandler[User] {
     Users.byEmail(username).filter{x => BCrypt.checkpw(password, x.password)}.headOption
   }
   
-  def createAccessToken(authInfo: AuthInfo[User]): Future[AccessToken] = ???
+  def createAccessToken(authInfo: AuthInfo[User]): Future[AccessToken] = Future {
+    val expiration = Some(3600L)
+    val refreshToken = Some(generateToken)
+    val accessToken = generateToken
+    val timestamp = DateTime.now
+    val newToken = AccessTokenE(accessToken, refreshToken, authInfo.user.id, authInfo.scope, expiration, timestamp, authInfo.clientId)
+    AccessTokens -= (authInfo.user.id, authInfo.clientId) 
+    (AccessTokens += newToken) match {
+      case Success(x) => AccessToken(accessToken, refreshToken, authInfo.scope, expiration, timestamp.toDate)
+    }
+  }
   
   def getStoredAccessToken(authInfo: AuthInfo[User]): Future[Option[AccessToken]] = ???
   
@@ -31,5 +45,7 @@ class Oath2Handler extends DataHandler[User] {
   def findAccessToken(token: String): Future[Option[AccessToken]] = ???
   
   def findAuthInfoByAccessToken(accessToken: AccessToken): Future[Option[AuthInfo[User]]] = ???
+  
+  def generateToken = new BASE64Encoder().encode(UUID.randomUUID.toString.getBytes)
 
 }
