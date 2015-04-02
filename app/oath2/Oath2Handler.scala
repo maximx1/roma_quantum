@@ -29,6 +29,7 @@ class Oath2Handler extends DataHandler[User] {
     AccessTokens -= (authInfo.user.id, authInfo.clientId) 
     (AccessTokens += newToken) match {
       case Success(x) => AccessToken(accessToken, refreshToken, authInfo.scope, expiration, timestamp.toDate)
+      case Failure(x) => throw new Exception(x)
     }
   }
   
@@ -41,9 +42,9 @@ class Oath2Handler extends DataHandler[User] {
   def refreshAccessToken(authInfo: AuthInfo[User], refreshToken: String): Future[AccessToken] = createAccessToken(authInfo)
   
   def findAuthInfoByCode(code: String): Future[Option[AuthInfo[User]]] = Future {
-    AuthCodes.byCode(code) map { authCode =>
-      Users.byId(authCode.userId).headOption match {
-        case Some(user) => AuthInfo(user, authCode.clientId, authCode.scope, authCode.redirectUri)
+    AuthCodes.byCode(code) flatMap { authCode =>
+      Users.byId(authCode.userId).headOption map { user =>
+        AuthInfo(user, authCode.clientId, authCode.scope, authCode.redirectUri)
       }
     }
   }

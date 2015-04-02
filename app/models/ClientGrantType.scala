@@ -9,7 +9,7 @@ import com.github.tototoshi.slick.HsqldbJodaSupport._
 case class ClientGrantType(
     clientId: String,
     grantTypeId: Int
-)
+) extends Model
 
 class ClientGrantTypes(tag: Tag) extends Table[ClientGrantType](tag, "CLIENT_GRANT_TYPES") {
   def clientId = column[String]("CLIENT_ID")
