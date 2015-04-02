@@ -34,7 +34,15 @@ object AccessTokens extends BaseSlickTrait[AccessToken] {
     model.filter(x => x.clientId === clientId && x.userId === userId).delete
   }
   
+  def findByToken(token: String) = DB withSession { implicit session =>
+    model.filter(_.accessToken === token).list.headOption
+  }
+  
   def findByIds(userId: UUID, clientId: Option[String]) = DB withSession { implicit session =>
     model.filter(x => x.clientId === clientId && x.userId === userId).list
+  }
+  
+  def findByRefreshToken(refreshToken: String) = DB withSession { implicit session =>
+    model.filter(_.refreshToken === refreshToken).list.headOption
   }
 }
