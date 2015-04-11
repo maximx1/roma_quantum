@@ -16,8 +16,8 @@ case class User(
   password: String,
   createdAt: DateTime,
   createdByUuid: UUID,
-  updatedAt: DateTime,
-  updatedByUuid: UUID,
+  updatedAt: Option[DateTime],
+  updatedByUuid: Option[UUID],
   deletedAt: Option[DateTime],
   deletedByUuid: Option[UUID]
 ) extends Model
@@ -30,10 +30,10 @@ class Users(tag: Tag) extends Table[User](tag, "USERS") {
   def password = column[String]("PASSKEY", O.NotNull)
   def createdAt = column[DateTime]("CREATED_AT", O.NotNull)
   def createdByUuid = column[UUID]("CREATED_BY_UUID", O.NotNull)
-  def updatedAt = column[DateTime]("UPDATED_AT", O.NotNull)
-  def updatedByUuid = column[UUID]("UPDATED_BY_UUID", O.NotNull)
-  def deletedAt = column[Option[DateTime]]("DELETED_AT", O.NotNull)
-  def deletedByUuid = column[Option[UUID]]("DELETED_BY_UUID", O.NotNull)
+  def updatedAt = column[Option[DateTime]]("UPDATED_AT")
+  def updatedByUuid = column[Option[UUID]]("UPDATED_BY_UUID")
+  def deletedAt = column[Option[DateTime]]("DELETED_AT")
+  def deletedByUuid = column[Option[UUID]]("DELETED_BY_UUID")
   def * = (id, firstName, lastName, email, password, createdAt, createdByUuid, updatedAt, updatedByUuid, deletedAt, deletedByUuid) <> (User.tupled, User.unapply)
 }
 
